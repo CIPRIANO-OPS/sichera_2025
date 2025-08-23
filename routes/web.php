@@ -12,3 +12,5 @@ Route::resource('ventas', VentaController::class);
 Route::get('/', function () {
     return view('welcome');
 });
+
+// este es un comentario
