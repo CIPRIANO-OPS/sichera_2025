@@ -41,3 +41,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/mesas/{mesa}/separar', [MesaController::class, 'separar'])->name('mesas.separar');
     Route::post('/mesas/{mesa}/crear-comanda', [MesaController::class, 'crearComanda'])->name('mesas.crear-comanda');
 });
+
+// este es un comentario
