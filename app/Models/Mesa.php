@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Mesa extends Model
 {
@@ -70,5 +71,29 @@ class Mesa extends Model
             default:
                 return 'secondary';
         }
+    }
+
+    /**
+     * Relación con Comandas
+     */
+    public function comandas(): HasMany
+    {
+        return $this->hasMany(Comanda::class, 'mesa_id', 'pk');
+    }
+
+    /**
+     * Obtener la comanda activa de la mesa
+     */
+    public function comandaActiva()
+    {
+        return $this->comandas()->where('estado', 'abierta')->first();
+    }
+
+    /**
+     * Verificar si la mesa tiene una comanda activa
+     */
+    public function tieneComandaActiva(): bool
+    {
+        return $this->comandaActiva() !== null;
     }
 }

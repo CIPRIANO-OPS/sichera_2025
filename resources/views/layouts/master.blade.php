@@ -26,6 +26,10 @@
     <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('assets/css/flag-icon.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" type="text/css">
+    <!-- Notyf CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     @stack('styles')
 </head>
@@ -88,12 +92,53 @@
     <script src="{{ asset('assets/plugins/apexcharts/irregular-data-series.js') }}"></script>
     <!-- Slick js -->
     <script src="{{ asset('assets/plugins/slick/slick.min.js') }}"></script>
-    <!-- Custom Dashboard js -->
+    <!-- Custom Dashboard js - Solo cargar en dashboard -->
+    @if(request()->routeIs('dashboard'))
     <script src="{{ asset('assets/js/custom/custom-dashboard.js') }}"></script>
+    @endif
     <!-- Core js -->
     <script src="{{ asset('assets/js/core.js') }}"></script>
+    <!-- Notyf JS -->
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 
-    @stack('scripts')
+    <!-- CSRF Token Setup for AJAX -->
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        // Initialize Notyf
+        const notyf = new Notyf({
+            duration: 4000,
+            position: {
+                x: 'right',
+                y: 'top'
+            },
+            types: [{
+                    type: 'success',
+                    background: '#28a745',
+                    icon: {
+                        className: 'fas fa-check',
+                        tagName: 'i',
+                        color: 'white'
+                    }
+                },
+                {
+                    type: 'error',
+                    background: '#dc3545',
+                    icon: {
+                        className: 'fas fa-times',
+                        tagName: 'i',
+                        color: 'white'
+                    }
+                }
+            ]
+        });
+    </script>
+
+    @yield('scripts')
 </body>
 
 </html>

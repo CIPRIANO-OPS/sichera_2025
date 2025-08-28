@@ -49,6 +49,27 @@
                     </a>
                 </li>
 
+                <li class="vertical-header">Menú</li>
+
+                <li>
+                    <a href="{{ route('plato-categorias.index') }}" class="{{ request()->routeIs('plato-categorias.*') ? 'active' : '' }}">
+                        <i class="ri-bookmark-3-fill"></i><span>Categorías de Platos</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('platos.index') }}" class="{{ request()->routeIs('platos.*') ? 'active' : '' }}">
+                        <i class="ri-restaurant-fill"></i><span>Platos</span>
+                    </a>
+                </li>
+
+                <li class="vertical-header">Administración</li>
+
+                <li>
+                    <a href="{{ route('usuarios.index') }}" class="{{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
+                        <i class="ri-user-settings-fill"></i><span>Usuarios</span>
+                    </a>
+                </li>
 
             </ul>
         </div>

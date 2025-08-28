@@ -45,16 +45,24 @@ class MesaController extends Controller
                 'estado' => $request->estado ?? 'disponible'
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Mesa creada exitosamente',
-                'mesa' => $mesa
-            ]);
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Mesa creada exitosamente',
+                    'mesa' => $mesa
+                ]);
+            }
+
+            return redirect()->route('mesas.index')->with('success', 'Mesa creada exitosamente');
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al crear la mesa: ' . $e->getMessage()
-            ], 500);
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al crear la mesa: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return redirect()->back()->with('error', 'Error al crear la mesa: ' . $e->getMessage());
         }
     }
 
@@ -136,6 +144,18 @@ class MesaController extends Controller
     {
         $mesas = Mesa::orderBy('numero')->get();
         return view('mesas.restaurant', compact('mesas'));
+    }
+
+    /**
+     * Obtener mesas en formato JSON para AJAX
+     */
+    public function getMesasJson()
+    {
+        $mesas = Mesa::orderBy('numero')->get();
+        return response()->json([
+            'success' => true,
+            'mesas' => $mesas
+        ]);
     }
 
     /**

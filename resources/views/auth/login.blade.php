@@ -67,7 +67,5 @@
         <button type="button" class="btn btn-danger rounded-circle font-18 ml-2"><i class="ri-google-line"></i></button>
     </div>
     
-    @if (Route::has('register'))
-        <p class="mb-0 mt-3">¿No tienes una cuenta? <a href="{{ route('register') }}">Regístrate</a></p>
-    @endif
+    {{-- Registro deshabilitado para usuarios externos --}}
 </x-guest-layout>

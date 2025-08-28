@@ -33,50 +33,50 @@
             <div class="card-header">
                 <h5 class="card-title">Lista de Mesas</h5>
             </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover" id="mesasTable">
-                            <thead>
-                                <tr>
-                                    <th>Número</th>
-                                    <th>Estado</th>
-                                    <th>Fecha Creación</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($mesas as $mesa)
-                                <tr>
-                                    <td><strong>{{ $mesa->numero }}</strong></td>
-                                    <td>
-                                        <span class="badge bg-{{ $mesa->getColorEstado() }}">
-                                            {{ ucfirst(str_replace('_', ' ', $mesa->estado)) }}
-                                        </span>
-                                    </td>
-                                    <td>{{ $mesa->created_at->format('d/m/Y H:i') }}</td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <button type="button" class="btn btn-sm btn-outline-primary" 
-                                                    onclick="editMesa({{ $mesa->pk }})" 
-                                                    data-toggle="modal" 
-                                                    data-target="#editMesaModal">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-danger" 
-                                                    onclick="deleteMesa({{ $mesa->pk }})">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="mesasTable">
+                        <thead>
+                            <tr>
+                                <th>Número</th>
+                                <th>Estado</th>
+                                <th>Fecha Creación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($mesas as $mesa)
+                            <tr>
+                                <td><strong>{{ $mesa->numero }}</strong></td>
+                                <td>
+                                    <span class="badge bg-{{ $mesa->getColorEstado() }}">
+                                        {{ ucfirst(str_replace('_', ' ', $mesa->estado)) }}
+                                    </span>
+                                </td>
+                                <td>{{ $mesa->created_at->format('d/m/Y H:i') }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                            onclick="editMesa({{ $mesa->pk }})"
+                                            data-toggle="modal"
+                                            data-target="#editMesaModal">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                            onclick="deleteMesa({{ $mesa->pk }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <!-- Modal Crear Mesa -->
@@ -157,92 +157,200 @@
 
 @section('scripts')
 <script>
-// Crear Mesa
-$('#createMesaForm').on('submit', function(e) {
-    e.preventDefault();
-    
-    $.ajax({
-        url: '{{ route("mesas.store") }}',
-        method: 'POST',
-        data: $(this).serialize(),
-        success: function(response) {
-            if(response.success) {
-                $('#createMesaModal').modal('hide');
-                location.reload();
-                alert('Mesa creada exitosamente');
-            }
-        },
-        error: function(xhr) {
-            let errors = xhr.responseJSON.errors;
-            let errorMessage = 'Error al crear la mesa:\n';
-            for(let field in errors) {
-                errorMessage += errors[field][0] + '\n';
-            }
-            alert(errorMessage);
-        }
-    });
-});
+    // Crear Mesa
+    $(document).ready(function() {
+        $('#createMesaForm').on('submit', function(e) {
+            e.preventDefault();
+            console.log('Form submit intercepted by AJAX');
 
-// Editar Mesa
-function editMesa(mesaId) {
-    $.ajax({
-        url: `/mesas/${mesaId}/edit`,
-        method: 'GET',
-        success: function(response) {
-            $('#edit_mesa_id').val(mesaId);
-            $('#edit_numero').val(response.mesa.numero);
-            $('#edit_estado').val(response.mesa.estado);
-        }
-    });
-}
+            $.ajax({
+                url: '{{ route("mesas.store") }}',
+                method: 'POST',
+                data: $(this).serialize(),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#createMesaModal').modal('hide');
+                        $('#createMesaForm')[0].reset();
+                        notyf.success(response.message);
+                        loadMesas();
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorMessage = 'Error al crear la mesa: ';
+                        for (let field in errors) {
+                            errorMessage += errors[field][0] + ' ';
+                        }
+                        notyf.error(errorMessage);
+                    } else {
+                        notyf.error('Error al crear la mesa');
+                    }
+                }
+            });
+        });
 
-$('#editMesaForm').on('submit', function(e) {
-    e.preventDefault();
-    
-    let mesaId = $('#edit_mesa_id').val();
-    
-    $.ajax({
-        url: `/mesas/${mesaId}`,
-        method: 'PUT',
-        data: $(this).serialize(),
-        success: function(response) {
-            if(response.success) {
-                $('#editMesaModal').modal('hide');
-                location.reload();
-                alert('Mesa actualizada exitosamente');
-            }
-        },
-        error: function(xhr) {
-            let errors = xhr.responseJSON.errors;
-            let errorMessage = 'Error al actualizar la mesa:\n';
-            for(let field in errors) {
-                errorMessage += errors[field][0] + '\n';
-            }
-            alert(errorMessage);
-        }
-    });
-});
+        // Editar Mesa
+        window.editMesa = function(mesaId) {
+            $.ajax({
+                url: `/mesas/${mesaId}/edit`,
+                method: 'GET',
+                success: function(response) {
+                    $('#edit_mesa_id').val(mesaId);
+                    $('#edit_numero').val(response.mesa.numero);
+                    $('#edit_estado').val(response.mesa.estado);
+                }
+            });
+        };
 
-// Eliminar Mesa
-function deleteMesa(mesaId) {
-    if(confirm('¿Está seguro de que desea eliminar esta mesa?')) {
+        $('#editMesaForm').on('submit', function(e) {
+            e.preventDefault();
+
+            let mesaId = $('#edit_mesa_id').val();
+
+            $.ajax({
+                url: `/mesas/${mesaId}`,
+                method: 'PUT',
+                data: $(this).serialize(),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#editMesaModal').modal('hide');
+                        notyf.success(response.message);
+                        loadMesas();
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorMessage = 'Error al actualizar la mesa: ';
+                        for (let field in errors) {
+                            errorMessage += errors[field][0] + ' ';
+                        }
+                        notyf.error(errorMessage);
+                    } else {
+                        notyf.error('Error al actualizar la mesa');
+                    }
+                }
+            });
+        });
+
+        // Eliminar Mesa
+        window.deleteMesa = function(mesaId) {
+            if (confirm('¿Está seguro de que desea eliminar esta mesa?')) {
+                $.ajax({
+                    url: `/mesas/${mesaId}`,
+                    method: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            notyf.success(response.message);
+                            loadMesas();
+                        }
+                    },
+                    error: function(xhr) {
+                        notyf.error('Error al eliminar la mesa');
+                    }
+                });
+            }
+        };
+    });
+
+    // Función para recargar solo las mesas
+    function loadMesas() {
         $.ajax({
-            url: `/mesas/${mesaId}`,
-            method: 'DELETE',
-            data: {
-                _token: '{{ csrf_token() }}'
+            url: '{{ route("mesas.json") }}',
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
             },
             success: function(response) {
-                if(response.success) {
-                    location.reload();
-                    alert('Mesa eliminada exitosamente');
+                if (response.success) {
+                    renderMesas(response.mesas);
                 }
             },
-            error: function(xhr) {
-                alert('Error al eliminar la mesa');
+            error: function() {
+                notyf.error('Error al cargar las mesas');
             }
         });
     }
-}
+
+    // Función para renderizar las mesas dinámicamente
+    function renderMesas(mesas) {
+        let tbody = $('#mesasTable tbody');
+        tbody.empty();
+
+        if (mesas.length === 0) {
+            tbody.append(`
+            <tr>
+                <td colspan="4" class="text-center py-4">
+                    <i class="fas fa-utensils fa-2x text-muted mb-2"></i>
+                    <p class="text-muted mb-0">No hay mesas registradas</p>
+                </td>
+            </tr>
+        `);
+        } else {
+            mesas.forEach(function(mesa) {
+                let colorEstado = getColorEstado(mesa.estado);
+                let estadoTexto = mesa.estado.charAt(0).toUpperCase() + mesa.estado.slice(1).replace('_', ' ');
+
+                tbody.append(`
+                <tr>
+                    <td><strong>${mesa.numero}</strong></td>
+                    <td>
+                        <span class="badge bg-${colorEstado}">
+                            ${estadoTexto}
+                        </span>
+                    </td>
+                    <td>${new Date(mesa.created_at).toLocaleDateString('es-ES')} ${new Date(mesa.created_at).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'})}</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                    onclick="editMesa(${mesa.pk})"
+                                    data-toggle="modal"
+                                    data-target="#editMesaModal">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                    onclick="deleteMesa(${mesa.pk})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `);
+            });
+        }
+    }
+
+    // Función auxiliar para obtener el color del estado
+    function getColorEstado(estado) {
+        switch (estado) {
+            case 'disponible':
+                return 'success';
+            case 'ocupado':
+                return 'danger';
+            case 'reservado':
+                return 'warning';
+            case 'por_desocupar':
+                return 'info';
+            default:
+                return 'secondary';
+        }
+    }
 </script>
 @endsection
