@@ -61,11 +61,17 @@
     <div class="login-or">
         <h6 class="text-muted">O</h6>
     </div>
+
     
     <div class="social-login text-center">
         <button type="button" class="btn btn-primary rounded-circle font-18"><i class="ri-facebook-line"></i></button>
         <button type="button" class="btn btn-danger rounded-circle font-18 ml-2"><i class="ri-google-line"></i></button>
     </div>
-    
+
     {{-- Registro deshabilitado para usuarios externos --}}
+
+    @if (Route::has('register'))
+        <p class="mb-0 mt-3">¿No tienes una cuenta? <a href="{{ route('register') }}">Regístrate</a></p>
+    @endif
+
 </x-guest-layout>
