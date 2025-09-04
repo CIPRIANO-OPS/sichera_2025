@@ -2,8 +2,11 @@
 <tr data-id="{{ $cliente->id }}">
     <td>{{ $cliente->nombre }}</td>
     <td>{{ $cliente->apellido }}</td>
-    <td>{{ $cliente->correo }}</td>
     <td>{{ $cliente->celular }}</td>
+    <td>{{ $cliente->fechaNac }}</td>
+    <td>{{ $cliente->direccion  }}</td>
+    <td>{{ $cliente->correo }}</td>
+    
     <td>
         <button class="btn btn-info btn-sm" onclick="viewCliente({{ $cliente->id }})" data-toggle="tooltip" title="Ver">
             <i class="fas fa-eye"></i>

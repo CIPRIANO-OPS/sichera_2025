@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('plato_categorias', function (Blueprint $table) {
             $table->id(); // Clave primaria
             $table->string('nombre')->unique();
-            $table->text('descripcion')->nullable();
-            $table->decimal('precio', 8, 2)->nullable(); // Precio opcional
+            $table->text('estado')->nullable(); // Descripción opcional
             $table->timestamps();
         });
     }

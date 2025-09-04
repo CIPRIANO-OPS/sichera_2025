@@ -20,8 +20,10 @@ class ClienteController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('nombre', 'LIKE', "%{$search}%")
                   ->orWhere('apellido', 'LIKE', "%{$search}%")
-                  ->orWhere('correo', 'LIKE', "%{$search}%")
-                  ->orWhere('celular', 'LIKE', "%{$search}%");
+                  ->orWhere('celular', 'LIKE', "%{$search}%")
+                  ->orWhere('fechaNac', 'LIKE', "%{$search}%")
+                  ->orWhere('direccion', 'LIKE', "%{$search}%")
+                  ->orWhere('correo', 'LIKE', "%{$search}%");
             });
         }
         
@@ -39,8 +41,8 @@ class ClienteController extends Controller
             ]);
         }
         
-        $clientes = $query->paginate($perPage);
-        return view('clientes.index', compact('clientes'));
+        $comensales = $query->paginate($perPage);
+        return view('clientes.index', ['clientes' => $comensales]);
     }
 
     public function create()
@@ -53,8 +55,11 @@ class ClienteController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'correo' => 'required|email|unique:clientes|max:255',
-            'celular' => 'required|string|max:20'
+            'celular' => 'required|string|unique:clientes|max:20',
+            'fechaNac' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            'correo' => 'required|email||max:255',
+    
         ]);
 
         $cliente = Cliente::create($request->all());
@@ -93,10 +98,13 @@ class ClienteController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
-            'correo' => 'required|email|unique:clientes,correo,' . $cliente->id . '|max:255',
-            'celular' => 'required|string|max:20'
+            'celular' => 'required|string|unique:clientes,celular, |max:20',
+            'fechaNac' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            'correo' => 'required|email' . $cliente->id . '|max:255',
+            
         ]);
-
+ 
         $cliente->update($request->all());
         
         if ($request->ajax()) {

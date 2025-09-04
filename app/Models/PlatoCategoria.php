@@ -13,12 +13,11 @@ class PlatoCategoria extends Model
 
     protected $fillable = [
         'nombre',
-        'descripcion',
-        'precio'
+        'estado'
     ];
 
     protected $casts = [
-        'precio' => 'decimal:2'
+        
     ];
 
     /**
@@ -34,7 +33,7 @@ class PlatoCategoria extends Model
      */
     public function scopeBuscar($query, $termino)
     {
-        return $query->where('nombre', 'like', '%' . $termino . '%')
-                    ->orWhere('descripcion', 'like', '%' . $termino . '%');
+        return $query->where('nombre', 'like', '%' . $termino . '%');
+
     }
 }

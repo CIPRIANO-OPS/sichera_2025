@@ -11,10 +11,9 @@ class Cliente extends Model
     'nombre',
     'apellido',
     'celular',
-    'telefono',
-    'fecha_nac',
-    'correo',
-    'direccion'
+    'fechaNac',
+    'direccion',
+    'correo'
     ];	
 
 //

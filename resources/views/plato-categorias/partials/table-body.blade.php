@@ -1,25 +1,28 @@
 @foreach($categorias as $categoria)
 <tr>
-    <td>{{ $categoria->id }}</td>
-    <td>
+    
+    <td  class="{{ $categoria->estado === 'inactivo' ? 'text-danger' : '' }}">
+        {{ $categoria->id }}
+    </td>
+    <td class="{{ $categoria->estado === 'inactivo' ? 'text-danger' : '' }}">
         <strong>{{ $categoria->nombre }}</strong>
     </td>
+
     <td>
-        <span class="text-muted">{{ Str::limit($categoria->descripcion, 50) ?? 'Sin descripción' }}</span>
-    </td>
-    <td>
-        @if($categoria->precio)
-            <span class="badge badge-success">${{ number_format($categoria->precio, 2) }}</span>
+        @if ($categoria->estado === 'activo')
+            <span class="badge bg-success">Activo</span>
         @else
-            <span class="text-muted">No definido</span>
+            <span class="badge bg-danger">Inactivo</span>
         @endif
     </td>
-    <td>
+
+    <!-- <td>
         <span class="badge badge-info">{{ $categoria->platos_count ?? $categoria->platos()->count() }}</span>
-    </td>
+    </td> -->
     <td>
-        <small class="text-muted">{{ $categoria->created_at->format('d/m/Y H:i') }}</small>
+        <small class="test-muted">{{ $categoria->created_at->format('d/m/Y H:i') }}</small>
     </td>
+    
     <td>
         <div class="btn-group" role="group">
             <button type="button" class="btn btn-sm btn-outline-info btn-edit" 

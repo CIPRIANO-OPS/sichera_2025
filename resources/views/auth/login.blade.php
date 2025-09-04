@@ -70,8 +70,8 @@
 
     {{-- Registro deshabilitado para usuarios externos --}}
 
-    @if (Route::has('register'))
+    <!-- @if (Route::has('register'))
         <p class="mb-0 mt-3">¿No tienes una cuenta? <a href="{{ route('register') }}">Regístrate</a></p>
-    @endif
+    @endif -->
 
 </x-guest-layout>

@@ -16,10 +16,9 @@ return new class extends Migration
         $table->string('nombre');
         $table->string('apellido');
         $table->string('celular')->nullable();
-        $table->string('telefono')->nullable();
-        $table->date('fecha_nac')->nullable();
-        $table->string('correo')->unique();
+        $table->date('fechaNac')->nullable();
         $table->string('direccion')->nullable();
+        $table->string('correo')->unique();
         $table->timestamps();
     });
     }

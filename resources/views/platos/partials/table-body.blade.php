@@ -11,7 +11,7 @@
         <span class="text-muted">{{ Str::limit($plato->descripcion, 60) }}</span>
     </td>
     <td>
-        <span class="badge badge-success">${{ number_format($plato->precio, 2) }}</span>
+        <span class="badge badge-success">S/{{ number_format($plato->precio, 2) }}</span>
     </td>
     <td>
         <span class="badge badge-secondary">{{ $plato->tipo }}</span>

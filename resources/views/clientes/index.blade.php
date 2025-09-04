@@ -50,8 +50,10 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
-                                <th>Correo</th>
                                 <th>Celular</th>
+                                <th>fechaNac</th>
+                                <th>dirección</th>
+                                <th>Correo</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -60,8 +62,11 @@
                             <tr data-id="{{ $cliente->id }}">
                                 <td>{{ $cliente->nombre }}</td>
                                 <td>{{ $cliente->apellido }}</td>
-                                <td>{{ $cliente->correo }}</td>
                                 <td>{{ $cliente->celular }}</td>
+                                <td>{{ $cliente->fechaNac }}</td>
+                                <td>{{ $cliente->direccion }}</td>
+                                <td>{{ $cliente->correo }}</td>
+                                
                                 <td>
                                     <button class="btn btn-info btn-sm" onclick="viewCliente({{ $cliente->id }})" data-toggle="tooltip" title="Ver">
                                         <i class="fas fa-eye"></i>
@@ -117,12 +122,21 @@
                         <input type="text" class="form-control" id="create_apellido" name="apellido" required>
                     </div>
                     <div class="form-group">
-                        <label for="create_correo">Correo</label>
-                        <input type="email" class="form-control" id="create_correo" name="correo" required>
-                    </div>
-                    <div class="form-group">
                         <label for="create_celular">Celular</label>
                         <input type="text" class="form-control" id="create_celular" name="celular" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="create_fechaNac">FechaNac</label>
+                        <input type="date" class="form-control" id="create_fechaNac" name="fechaNac" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_direccion">Dirección</label>
+                        <input type="text" class="form-control" id="create_direccion" name="direccion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="create_correo">Correo</label>
+                        <input type="email" class="form-control" id="create_correo" name="correo" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -158,12 +172,21 @@
                         <input type="text" class="form-control" id="edit_apellido" name="apellido" required>
                     </div>
                     <div class="form-group">
-                        <label for="edit_correo">Correo</label>
-                        <input type="email" class="form-control" id="edit_correo" name="correo" required>
-                    </div>
-                    <div class="form-group">
                         <label for="edit_celular">Celular</label>
                         <input type="text" class="form-control" id="edit_celular" name="celular" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit_fechaNac">FechaNac</label>
+                        <input type="date" class="form-control" id="edit_fechaNac" name="fechaNac" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_direccion">Dirección</label>
+                        <input type="text" class="form-control" id="edit_direccion" name="direccion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_correo">Correo</label>
+                        <input type="email" class="form-control" id="edit_correo" name="correo" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -198,12 +221,23 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <strong>Correo:</strong>
-                        <p id="view_correo"></p>
-                    </div>
-                    <div class="col-md-6">
                         <strong>Celular:</strong>
                         <p id="view_celular"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>FechaNac:</strong>
+                        <p id="view_fechaNac"></p>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Dirección:</strong>
+                        <p id="view_direccion"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Correo:</strong>
+                        <p id="view_correo"></p>
                     </div>
                 </div>
             </div>
@@ -311,8 +345,10 @@ function viewCliente(id) {
         success: function(response) {
             $('#view_nombre').text(response.nombre);
             $('#view_apellido').text(response.apellido);
-            $('#view_correo').text(response.correo);
             $('#view_celular').text(response.celular);
+            $('#view_fechaNac').text(response.fechaNac);
+            $('#view_direccion').text(response.direccion);
+            $('#view_correo').text(response.correo);
             $('#viewClienteModal').modal('show');
         },
         error: function() {
@@ -330,8 +366,11 @@ function editCliente(id) {
             $('#edit_cliente_id').val(response.id);
             $('#edit_nombre').val(response.nombre);
             $('#edit_apellido').val(response.apellido);
-            $('#edit_correo').val(response.correo);
             $('#edit_celular').val(response.celular);
+            $('#edit_fechaNac').val(response.fechaNac);
+            $('#edit_direccion').val(response.direccion);
+            $('#edit_correo').val(response.correo);
+            
             $('#editClienteModal').modal('show');
         },
         error: function() {

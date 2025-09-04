@@ -55,9 +55,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Precio</th>
-                                <th>Platos</th>
+                                <th>Estado</th>
                                 <th>Fecha Creación</th>
                                 <th>Acciones</th>
                             </tr>
@@ -96,13 +94,13 @@
                         <input type="text" class="form-control" id="create_nombre" name="nombre" required>
                     </div>
                     <div class="form-group">
-                        <label for="create_descripcion">Descripción</label>
-                        <textarea class="form-control" id="create_descripcion" name="descripcion" rows="3"></textarea>
+                        <label for="create_nombre">Estado*</label>
+                        <select  class="form-control" id="estado" name="estado" required>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label for="create_precio">Precio</label>
-                        <input type="number" class="form-control" id="create_precio" name="precio" step="0.01" min="0">
-                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -131,12 +129,11 @@
                         <input type="text" class="form-control" id="edit_nombre" name="nombre" required>
                     </div>
                     <div class="form-group">
-                        <label for="edit_descripcion">Descripción</label>
-                        <textarea class="form-control" id="edit_descripcion" name="descripcion" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit_precio">Precio</label>
-                        <input type="number" class="form-control" id="edit_precio" name="precio" step="0.01" min="0">
+                        <label for="create_nombre">Estado*</label>
+                        <select  class="form-control" id="edit_estado" name="estado" required>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -190,7 +187,10 @@ $(document).ready(function() {
     // Crear categoría
     $('#createForm').on('submit', function(e) {
         e.preventDefault();
-        
+
+        var data = $(this).serialize();
+        console.log(data);
+
         $.ajax({
             url: '{{ route("plato-categorias.store") }}',
             method: 'POST',
@@ -230,8 +230,7 @@ $(document).ready(function() {
                     let data = response.data;
                     $('#edit_id').val(data.id);
                     $('#edit_nombre').val(data.nombre);
-                    $('#edit_descripcion').val(data.descripcion);
-                    $('#edit_precio').val(data.precio);
+                    $('#edit_estado').val(data.estado);
                     $('#editModal').modal('show');
                 }
             },

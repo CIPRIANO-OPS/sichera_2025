@@ -23,7 +23,7 @@ class PlatoCategoriaController extends Controller
                 $query->buscar($request->search);
             }
             
-            $categorias = $query->orderBy('nombre', 'asc')->paginate(10);
+            $categorias = $query->orderBy('id', 'asc')->paginate(10);
             
             return response()->json([
                 'html' => view('plato-categorias.partials.table-body', compact('categorias'))->render(),
@@ -31,7 +31,7 @@ class PlatoCategoriaController extends Controller
             ]);
         }
         
-        $categorias = PlatoCategoria::orderBy('nombre', 'asc')->paginate(10);
+        $categorias = PlatoCategoria::orderBy('id', 'asc')->paginate(10);
         return view('plato-categorias.index', compact('categorias'));
     }
 
@@ -41,9 +41,7 @@ class PlatoCategoriaController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'nombre' => 'required|string|max:255|unique:plato_categorias,nombre',
-            'descripcion' => 'nullable|string',
-            'precio' => 'nullable|numeric|min:0'
+            'nombre' => 'required|string|max:255|unique:plato_categorias,nombre'
         ]);
 
         try {
