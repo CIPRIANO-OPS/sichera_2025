@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('producto_categoria', function (Blueprint $table) {
+        Schema::create('producto_categorias', function (Blueprint $table) {
             $table->id(); // Clave primaria
             $table->string('nombre')->unique();
             $table->text('estado')->nullable(); // Descripción opcional
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('producto_categoria');
+        Schema::dropIfExists('producto_categorias');
     }
 };
