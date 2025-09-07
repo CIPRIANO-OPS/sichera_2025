@@ -1,14 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\PlatoCategoria;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use App\Models\ProductoCategoria;
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
-class PlatoCategoriaController extends Controller
+class ProductoCategoriaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +14,7 @@ class PlatoCategoriaController extends Controller
     public function index(Request $request): View|JsonResponse
     {
         if ($request->ajax()) {
-            $query = PlatoCategoria::query();
+            $query = ProductoCategoria::query();
             
             // Búsqueda
             if ($request->has('search') && !empty($request->search)) {
@@ -26,13 +24,13 @@ class PlatoCategoriaController extends Controller
             $categorias = $query->orderBy('id', 'asc')->paginate(10);
             
             return response()->json([
-                'html' => view('plato-categorias.partials.table-body', compact('categorias'))->render(),
+                'html' => view('producto-categorias.partials.table-body', compact('categorias'))->render(),
                 'pagination' => $categorias->links('pagination::bootstrap-4')->render()
             ]);
         }
         
-        $categorias = PlatoCategoria::orderBy('id', 'asc')->paginate(10);
-        return view('plato-categorias.index', compact('categorias'));
+        $categorias = ProductoCategoria::orderBy('id', 'asc')->paginate(10);
+        return view('producto-categorias.index', compact('categorias'));
     }
 
     /**
@@ -41,15 +39,15 @@ class PlatoCategoriaController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'nombre' => 'required|string|max:255|unique:plato_categorias,nombre'
+            'nombre' => 'required|string|max:255|unique:producto_categorias,nombre'
         ]);
 
         try {
-            $categoria = PlatoCategoria::create($request->all());
+            $categoria = ProductoCategoria::create($request->all());
             
             return response()->json([
                 'success' => true,
-                'message' => 'Categoría de plato creada exitosamente',
+                'message' => 'Categoría de producto creada exitosamente',
                 'data' => $categoria
             ]);
         } catch (\Exception $e) {
@@ -63,30 +61,30 @@ class PlatoCategoriaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PlatoCategoria $platoCategoria): JsonResponse
+    public function show(ProductoCategoria $productoCategoria): JsonResponse
     {
         return response()->json([
             'success' => true,
-            'data' => $platoCategoria->load('platos')
+            'data' => $productoCategoria->load('productos')
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PlatoCategoria $platoCategoria): JsonResponse
+    public function update(Request $request, ProductoCategoria $productoCategoria): JsonResponse
     {
         $request->validate([
-            'nombre' => 'required|string|max:255|unique:plato_categorias,nombre,' . $platoCategoria->id,
+            'nombre' => 'required|string|max:255|unique:producto_categorias,nombre,' . $productoCategoria->id,
         ]);
 
         try {
-            $platoCategoria->update($request->all());
+            $productoCategoria->update($request->all());
             
             return response()->json([
                 'success' => true,
-                'message' => 'Categoría de plato actualizada exitosamente',
-                'data' => $platoCategoria
+                'message' => 'Categoría de producto actualizada exitosamente',
+                'data' => $productoCategoria
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -99,22 +97,22 @@ class PlatoCategoriaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PlatoCategoria $platoCategoria): JsonResponse
+    public function destroy(ProductoCategoria $productoCategoria): JsonResponse
     {
         try {
-            // Verificar si tiene platos asociados
-            if ($platoCategoria->platos()->count() > 0) {
+            // Verificar si tiene productos asociados
+            if ($productoCategoria->productos()->count() > 0) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No se puede eliminar la categoría porque tiene platos asociados'
+                    'message' => 'No se puede eliminar la categoría porque tiene productos asociados'
                 ], 400);
             }
             
-            $platoCategoria->delete();
+            $productoCategoria->delete();
             
             return response()->json([
                 'success' => true,
-                'message' => 'Categoría de plato eliminada exitosamente'
+                'message' => 'Categoría de producto eliminada exitosamente'
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -129,7 +127,7 @@ class PlatoCategoriaController extends Controller
      */
     public function getForSelect(): JsonResponse
     {
-        $categorias = PlatoCategoria::select('id', 'nombre')
+        $categorias = ProductoCategoria::select('id', 'nombre')
                                    ->orderBy('nombre', 'asc')
                                    ->get();
         
@@ -137,5 +135,5 @@ class PlatoCategoriaController extends Controller
             'success' => true,
             'data' => $categorias
         ]);
-    }
+    }    
 }

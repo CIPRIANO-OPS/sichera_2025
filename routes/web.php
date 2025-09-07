@@ -5,6 +5,8 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\MesaController;
 use App\Http\Controllers\PlatoCategoriaController;
+use App\Http\Controllers\ProductoCategoriaController;
+use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\PlatoController;
 use App\Http\Controllers\ComandaController;
 use App\Http\Controllers\PedidoController;
@@ -42,7 +44,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('ventas', VentaController::class);
     Route::resource('mesas', MesaController::class);
     Route::resource('plato-categorias', PlatoCategoriaController::class);
+    Route::resource('producto-categorias', ProductoCategoriaController::class);
     Route::resource('platos', PlatoController::class);
+    Route::resource('productos', ProductoController::class);
     Route::resource('comandas', ComandaController::class);
     Route::resource('pedidos', PedidoController::class);
 
@@ -54,14 +58,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Rutas especiales para plato-categorias
     Route::get('/api/plato-categorias/select', [PlatoCategoriaController::class, 'getForSelect'])->name('plato-categorias.select');
+    
+    // Rutas especiales para producto-categorias
+    Route::get('/api/producto-categorias/select', [ProductoCategoriaController::class, 'getForSelect'])->name('producto-categorias.select');
 
     // Rutas especiales para platos
     Route::get('/api/platos/categoria', [PlatoController::class, 'getPorCategoria'])->name('platos.por-categoria');
     Route::get('/api/platos/tipos', [PlatoController::class, 'getTipos'])->name('platos.tipos');
     
+        // Rutas especiales para productos
+    Route::get('/api/productos/categoria', [ProductoController::class, 'getPorCategoria'])->name('productos.por-categoria');
+    Route::get('/api/productos/tipos', [ProductoController::class, 'getTipos'])->name('productos.tipos');
+
     // Rutas especiales para comandas
     Route::get('/api/comandas/categorias', [ComandaController::class, 'getCategorias'])->name('comandas.categorias');
     Route::get('/api/comandas/platos-categoria', [ComandaController::class, 'getPlatosPorCategoria'])->name('comandas.platos-categoria');
+    Route::get('/api/comandas/productos-categoria', [ComandaController::class, 'getProductosPorCategoria'])->name('comandas.productos-categoria');
     Route::post('/comandas/{comanda}/cerrar', [ComandaController::class, 'cerrar'])->name('comandas.cerrar');
     Route::post('/comandas/{comanda}/cancelar', [ComandaController::class, 'cancelar'])->name('comandas.cancelar');
     

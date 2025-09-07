@@ -1,0 +1,56 @@
+@foreach($categorias as $categoria)
+<tr>
+    
+    <td  class="{{ $categoria->estado === 'inactivo' ? 'text-danger' : '' }}">
+        {{ $categoria->id }}
+    </td>
+    <td class="{{ $categoria->estado === 'inactivo' ? 'text-danger' : '' }}">
+        <strong>{{ $categoria->nombre }}</strong>
+    </td>
+
+    <td>
+        @if ($categoria->estado === 'activo')
+            <span class="badge bg-success">Activo</span>
+        @else
+            <span class="badge bg-danger">Inactivo</span>
+        @endif
+    </td>
+
+    <!-- <td>
+        <span class="badge badge-info">{{ $categoria->productos_count ?? $categoria->productos()->count() }}</span>
+    </td> -->
+    <td>
+        <small class="test-muted">{{ $categoria->created_at->format('d/m/Y H:i') }}</small>
+    </td>
+    
+    <td>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-sm btn-outline-info btn-edit" 
+                    data-id="{{ $categoria->id }}" 
+                    data-toggle="tooltip" 
+                    title="Editar">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger btn-delete" 
+                    data-id="{{ $categoria->id }}" 
+                    data-nombre="{{ $categoria->nombre }}"
+                    data-toggle="tooltip" 
+                    title="Eliminar">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </td>
+</tr>
+@endforeach
+
+@if($categorias->isEmpty())
+<tr>
+    <td colspan="7" class="text-center py-4">
+        <div class="empty-state">
+            <i class="fas fa-folder-open" style="font-size: 48px; color: #ccc;"></i>
+            <h5 class="mt-3 text-muted">No hay categorías registradas</h5>
+            <p class="text-muted">Comience creando una nueva categoría de producto</p>
+        </div>
+    </td>
+</tr>
+@endif

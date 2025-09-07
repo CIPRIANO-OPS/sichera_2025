@@ -51,15 +51,28 @@
 
                 <li class="vertical-header">Menú</li>
 
+                <!-- vista en el dashboard de principal  de platos y plato-categorias -->
                 <li>
                     <a href="{{ route('plato-categorias.index') }}" class="{{ request()->routeIs('plato-categorias.*') ? 'active' : '' }}">
-                        <i class="ri-bookmark-3-fill"></i><span>Categorías de Platos</span>
+                        <i class="ri-bookmark-3-fill"></i><span>Categorías_Platos</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="{{ route('platos.index') }}" class="{{ request()->routeIs('platos.*') ? 'active' : '' }}">
                         <i class="ri-restaurant-fill"></i><span>Platos</span>
+                    </a>
+                </li>
+                <!-- vista en el dashboard de principal  de productos y producto-categorias -->
+                <li>
+                    <a href="{{ route('producto-categorias.index') }}" class="{{ request()->routeIs('producto-categorias.*') ? 'active' : '' }}">
+                        <i class="fas-award"></i><span>Categorías_Productos</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('productos.index') }}" class="{{ request()->routeIs('productos.*') ? 'active' : '' }}">
+                        <i class="emblem-chevron-expand-square-fill"></i><span>Productos</span>
                     </a>
                 </li>
 
